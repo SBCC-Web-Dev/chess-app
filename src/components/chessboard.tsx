@@ -1,21 +1,32 @@
-import React from "react";
+"use client"
+import React, { useState, useRef } from "react";
 import Chesspiece from "./chesspiece";
-// import { ChessBoard } from "@/utils/types";
 import { fenToBoard } from "@/utils/fen";
 
 const Chessboard: React.FC = () => {
+    const boardRef = useRef<HTMLDivElement>(null);
+    const boardState = fenToBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 
-
-    const pieces = fenToBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").pieces
+    const [chessPieces, setChessPieces] = useState(boardState.pieces)
 
     return (
-        <div className="relative bg-[url('/chessboard.svg')] w-[25rem] h-[25rem]">
+        <div ref={boardRef} className="relative bg-[url('/chessboard.svg')] w-[25rem] h-[25rem]">
             <div className="bg-[url('/coordinates.svg')] w-[25rem] h-[25rem] left-0 top-0 absolute select-none"></div>
             {/* Render chess pieces */}
-            {pieces.map(({ type, color, rank, file, }) => {
+            {boardState.pieces.map(({ id, type, color, rank, file }) => {
                 return (
-                    <Chesspiece key={rank * 10 + file} color={color} type={type} rank={rank} file={file} />
-                )
+                    <Chesspiece
+                        key={id}
+                        id={id}
+                        color={color}
+                        type={type}
+                        rank={rank}
+                        file={file}
+                        boardDivRef={boardRef}
+                        chessPieces={chessPieces}
+                        setChessPieces={setChessPieces}
+                    />
+                );
             })}
         </div>
     );

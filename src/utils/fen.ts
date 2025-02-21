@@ -19,6 +19,7 @@ export const fenToBoard = (fen: string): ChessBoard => {
     const fullMoveClock = parseInt(splitData[5], 10)
     const pieces: ChesspieceProps[] = [];
 
+    let id = 0;
     rows.forEach((row, rankIndex) => {
         let file = 0;
         for (const char of row) {
@@ -30,8 +31,9 @@ export const fenToBoard = (fen: string): ChessBoard => {
 
                 if (type) {
                     const tempPeice: ChesspieceProps = {
+                        id: id++,
                         type: type,
-                        rank: rankIndex + 1,
+                        rank: 8 - rankIndex,
                         file: file + 1,
                         color: color,
                     }
